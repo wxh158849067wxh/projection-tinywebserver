@@ -1,5 +1,6 @@
 #ifndef LOG_H
 #define LOG_H
+
 #include<stdio.h>
 #include<iostream>
 #include<string>
@@ -46,7 +47,7 @@ private:
     int m_today;        //因为按天分类,记录当前时间是那一天
     FILE *m_fp;         //打开log的文件指针
     char *m_buf;
-    block_queue<string> *m_log_queue; //阻塞队列
+    block_queue<std::string> *m_log_queue; //阻塞队列
     bool m_is_async;                  //是否同步标志位
     locker m_mutex;
     int m_close_log; //关闭日志 
@@ -72,4 +73,7 @@ private:
     Log::get_instance()->write_log(3,format,##__VA_ARGS__);\
     Log::get_instance()->flush();\
 }
-#elif
+
+
+
+#endif
