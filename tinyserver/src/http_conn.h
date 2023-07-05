@@ -55,7 +55,7 @@ public:
         INTERNAL_ERROR;
         CLOSED_CONNECTION;
     };
-    enum LIVE_STATUS
+    enum LINE_STATUS
     {
         LINE_OK=O;
         LINE_BAD;
@@ -74,6 +74,39 @@ public:
     {
         return &m_address;
     }
+    void initmysql_result(connection_pool* connPool);
+    int timer_flag;
+    int improv;
+private:
+    void init();
+    HTTP_CODE process_read();
+    bool process_write(HTTP_CODE ret);
+    HTTP_CODE parse_request_line(char* text);
+    HTTP_CODE parse_headers(char* text);
+    HTTP_CODE parse_contend(char* text);
+    HTTP_CODE do_request();
+    char* get_line()
+    {
+        return m_read_buf+m_start_line;
+    }
+    LINE_STATUS parse_line();
+    void ummap();
+    bool add_response(const char* format,...);
+    bool add_content(const char* content);
+    bool add_status_line(int status,const char* title);
+    bool add_headers(int content_length);
+    bool add_linger();
+    bool add_blank_line();
+public:
+    static int m_epollfd;
+    static int m_user_count;
+    MYSQL* mysql;
+    int m_states;//读为0，写为1；
+    
+private:
+    int m_sockfd;
+    sockaddr_in m_address;
+    char m_read_buf[READ_BUFFER_SIZE];
 
 
 
